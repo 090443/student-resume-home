@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<!--
+  文件用途：大学生个人简历主页（静态示例模板）
+  说明：纯前端静态页面，无登录、无后端、无接口、无外部资源，不收集任何表单数据。
+  用法：用浏览器直接打开本文件；所有占位文字（姓名 / 专业 / 联系方式 / 项目）替换为真实内容即可使用。
+  技术：原生 HTML + CSS + JavaScript，样式与脚本全部内联在本文件内。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="description" content="大学生个人简历主页静态模板，包含个人介绍、基础技能、课程项目与联系方式。">
+<title>你的姓名 · 个人主页</title>
+<style>
+/* ============================================================
+   1. 主题变量与基础重置
+   ============================================================ */
+:root{
+  --bg:#f6f8fc;
+  --card:#ffffff;
+  --ink:#132239;
+  --ink-soft:#41536e;
+  --muted:#7e8ca0;
+  --brand:#1d4f91;
+  --brand-strong:#163c70;
+  --brand-soft:#eaf1fa;
+  --brand-line:#c9dbf0;
+  --line:#e2e8f1;
+  --radius:14px;
+  --nav-h:64px;
+  --shadow-card:0 1px 2px rgba(19,34,57,.04);
+  --shadow-card-hover:0 10px 24px rgba(19,34,57,.09);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+              "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size:16px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,h2,h3,p,ul,ol,dl,dd,figure{ margin:0; }
+ul,ol{ padding:0; list-style:none; }
+a{ color:var(--brand); text-decoration:none; }
+a:hover{ text-decoration:underline; }
+
+.container{
+  width:100%;
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 20px;
+}
+
+/* ============================================================
+   2. 顶部导航
+   ============================================================ */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  transition:box-shadow .18s ease;
+}
+.site-header.is-scrolled{
+  box-shadow:0 4px 16px rgba(19,34,57,.07);
+}
+
+.nav{
+  min-height:var(--nav-h);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.nav-brand{
+  font-size:16px;
+  font-weight:700;
+  color:var(--ink);
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+.nav-brand:hover{ text-decoration:none; }
+.nav-brand .dot{
+  display:inline-block;
+  width:7px; height:7px;
+  margin-right:8px;
+  border-radius:50%;
+  background:var(--brand);
+  vertical-align:2px;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.nav-links a{
+  display:block;
+  padding:8px 13px;
+  border-radius:8px;
+  font-size:14.5px;
+  color:var(--ink-soft);
+  transition:color .15s ease, background-color .15s ease;
+  white-space:nowrap;
+}
+.nav-links a:hover{
+  color:var(--brand-strong);
+  background:var(--brand-soft);
+  text-decoration:none;
+}
+.nav-links a.is-active{
+  color:var(--brand-strong);
+  background:var(--brand-soft);
+  font-weight:600;
+  box-shadow:inset 0 -2px 0 var(--brand);
+}
+.nav-links a:focus-visible{
+  outline:2px solid var(--brand);
+  outline-offset:2px;
+}
+
+/* ============================================================
+   3. 通用板块与标题层级
+   ============================================================ */
+.section{
+  padding:64px 0;
+  scroll-margin-top:calc(var(--nav-h) + 14px);
+}
+.section + .section{
+  border-top:1px solid var(--line);
+}
+
+.section-head{ max-width:46em; }
+
+.kicker{
+  display:inline-block;
+  font-size:12.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--brand);
+  margin-bottom:8px;
+}
+
+.section-head h2{
+  font-size:clamp(1.35rem, 3.2vw, 1.7rem);
+  line-height:1.35;
+  letter-spacing:-.01em;
+}
+
+.section-head .lead{
+  margin-top:8px;
+  color:var(--ink-soft);
+  font-size:15px;
+}
+
+/* 通用按钮 */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:0 22px;
+  border-radius:10px;
+  border:1px solid transparent;
+  font-size:15px;
+  font-weight:600;
+  font-family:inherit;
+  transition:background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease;
+}
+.btn:hover{ text-decoration:none; }
+.btn:focus-visible{ outline:2px solid var(--brand); outline-offset:2px; }
+
+.btn-primary{
+  background:var(--brand);
+  color:#fff;
+  border-color:var(--brand);
+}
+.btn-primary:hover{
+  background:var(--brand-strong);
+  border-color:var(--brand-strong);
+  box-shadow:0 6px 16px rgba(29,79,145,.18);
+}
+
+.btn-outline{
+  background:#fff;
+  color:var(--brand-strong);
+  border-color:var(--brand-line);
+}
+.btn-outline:hover{ background:var(--brand-soft); border-color:var(--brand); }
+
+/* ============================================================
+   4. 首屏个人介绍
+   ============================================================ */
+.hero{
+  padding:60px 0 56px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);
+  gap:34px;
+  align-items:start;
+}
+
+.hero-name{
+  font-size:clamp(1.9rem, 5vw, 2.5rem);
+  line-height:1.25;
+  letter-spacing:-.02em;
+  font-weight:700;
+}
+
+.hero-role{
+  margin-top:10px;
+  font-size:clamp(1rem, 2.4vw, 1.12rem);
+  color:var(--brand-strong);
+  font-weight:600;
+}
+
+.hero-intro{
+  margin-top:14px;
+  max-width:34em;
+  color:var(--ink-soft);
+  font-size:15.5px;
+}
+
+.hero-actions{
+  margin-top:24px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+/* 右侧事实卡（不放头像大图，只放文字信息） */
+.facts{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+  padding:20px 22px;
+}
+
+.facts h2{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:12px;
+}
+
+.facts dl{
+  display:grid;
+  gap:12px;
+}
+.facts .row{
+  display:grid;
+  grid-template-columns:5.5em minmax(0,1fr);
+  gap:10px;
+  padding-bottom:12px;
+  border-bottom:1px dashed var(--line);
+}
+.facts .row:last-child{ border-bottom:0; padding-bottom:0; }
+.facts dt{
+  font-size:13.5px;
+  color:var(--muted);
+}
+.facts dd{
+  font-size:14.5px;
+  color:var(--ink);
+  font-weight:600;
+}
+
+/* ============================================================
+   5. 技能板块
+   ============================================================ */
+.skill-grid{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:14px;
+}
+
+.skill-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px 18px 16px;
+  transition:border-color .18s ease, box-shadow .18s ease;
+}
+.skill-card:hover{
+  border-color:var(--brand-line);
+  box-shadow:var(--shadow-card-hover);
+}
+
+.skill-card h3{
+  font-size:15.5px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.skill-card h3::before{
+  content:"";
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--brand);
+  flex:none;
+}
+.skill-card p{
+  margin-top:8px;
+  font-size:14px;
+  color:var(--ink-soft);
+}
+
+/* ============================================================
+   6. 项目经历板块
+   ============================================================ */
+.project-grid{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(290px, 1fr));
+  gap:16px;
+}
+
+.project-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+  padding:20px 20px 18px;
+  display:flex;
+  flex-direction:column;
+  transition:border-color .18s ease, box-shadow .18s ease;
+}
+.project-card:hover{
+  border-color:var(--brand-line);
+  box-shadow:var(--shadow-card-hover);
+}
+
+.project-card h3{
+  font-size:16.5px;
+  line-height:1.45;
+  font-weight:700;
+}
+
+.project-type{
+  flex:none;
+  padding:3px 9px;
+  border-radius:999px;
+  background:var(--brand-soft);
+  border:1px solid var(--brand-line);
+  color:var(--brand-strong);
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.project-meta{
+  margin-top:11px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+}
+.project-meta span{
+  padding:3px 9px;
+  border-radius:6px;
+  background:#f5f8fc;
+  border:1px solid var(--line);
+  font-size:12.5px;
+  color:var(--ink-soft);
+}
+
+.project-desc{
+  margin-top:12px;
+  font-size:14.5px;
+  color:var(--ink-soft);
+  flex:1 1 auto;
+}
+
+.project-result{
+  margin-top:14px;
+  padding:11px 13px;
+  border-left:3px solid var(--brand);
+  border-radius:0 8px 8px 0;
+  background:#f7faff;
+  font-size:13.5px;
+  color:var(--ink);
+}
+.project-result .label{
+  display:block;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.1em;
+  color:var(--brand);
+  margin-bottom:3px;
+}
+
+/* ============================================================
+   7. 联系方式板块
+   ============================================================ */
+.contact-card{
+  margin-top:26px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+  padding:8px 22px;
+}
+
+.contact-row{
+  display:grid;
+  grid-template-columns:7.5em minmax(0,1fr);
+  gap:14px;
+  align-items:baseline;
+  padding:16px 0;
+  border-bottom:1px dashed var(--line);
+}
+.contact-row:last-child{ border-bottom:0; }
+
+.contact-label{
+  font-size:13.5px;
+  color:var(--muted);
+}
+.contact-value{
+  font-size:15px;
+  color:var(--ink);
+  font-weight:600;
+  word-break:break-all;
+}
+.contact-value a{ font-weight:600; }
+
+.contact-note{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:10px;
+  background:var(--brand-soft);
+  border:1px solid var(--brand-line);
+  color:var(--brand-strong);
+  font-size:13.5px;
+}
+
+/* ============================================================
+   8. 页脚
+   ============================================================ */
+.site-footer{
+  margin-top:20px;
+  padding:26px 0 34px;
+  border-top:1px solid var(--line);
+  background:#fff;
+}
+.site-footer p{
+  font-size:13.5px;
+  color:var(--muted);
+  text-align:center;
+}
+.site-footer .footer-brand{
+  display:block;
+  margin-bottom:6px;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  font-weight:600;
+}
+
+/* ============================================================
+   9. 响应式适配
+   ============================================================ */
+
+/* 平板：首屏改为上下排列 */
+@media (max-width:880px){
+  .hero-grid{
+    grid-template-columns:minmax(0,1fr);
+    gap:24px;
+  }
+  .facts{ order:2; }
+}
+
+/* 手机：导航改为上下排列，页面内边距收紧 */
+@media (max-width:640px){
+  .container{ padding:0 15px; }
+
+  .site-header{ position:static; }
+  .site-header.is-scrolled{ box-shadow:none; }
+
+  .nav{
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    padding:12px 0 8px;
+  }
+  .nav-brand{
+    padding-bottom:8px;
+    font-size:15.5px;
+  }
+  .nav-links{
+    flex-direction:column;
+    align-items:stretch;
+    gap:2px;
+    padding-top:4px;
+    border-top:1px solid var(--line);
+  }
+  .nav-links a{
+    padding:9px 12px;
+    border-radius:8px;
+    font-size:14.5px;
+  }
+  .nav-links a.is-active{
+    box-shadow:inset 3px 0 0 var(--brand);
+  }
+
+  .section{
+    padding:42px 0;
+    scroll-margin-top:14px;
+  }
+  .hero{ padding:34px 0 40px; }
+
+  .hero-actions .btn{ flex:1 1 100%; }
+
+  .facts{ padding:18px 16px; }
+  .facts .row{
+    grid-template-columns:4.5em minmax(0,1fr);
+  }
+
+  .project-grid,
+  .skill-grid{ gap:12px; }
+
+  .contact-card{ padding:6px 16px; }
+  .contact-row{
+    grid-template-columns:minmax(0,1fr);
+    gap:2px;
+    padding:14px 0;
+  }
+}
+
+/* 尊重系统的“减少动态效果”设置 */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ transition:none !important; animation:none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 顶部导航 ============ -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <nav class="nav" aria-label="页面导航">
+      <a class="nav-brand" href="#about"><span class="dot" aria-hidden="true"></span>你的姓名</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about" class="is-active">简介</a></li>
+        <li><a href="#skills">技能</a></li>
+        <li><a href="#projects">项目经历</a></li>
+        <li><a href="#contact">联系方式</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ 首屏：个人介绍 ============ -->
+  <section class="section hero" id="about">
+    <div class="container">
+      <div class="hero-grid">
+
+        <div class="hero-main">
+          <p class="kicker">个人简历主页</p>
+          <h1 class="hero-name">你的姓名</h1>
+          <p class="hero-role">XX 专业在读学生</p>
+          <p class="hero-intro">这里写你的学习方向、擅长内容和求职目标。</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">查看项目</a>
+            <a class="btn btn-outline" href="#contact">联系我</a>
+          </div>
+        </div>
+
+        <aside class="facts" aria-label="基本信息">
+          <h2>基本信息</h2>
+          <dl>
+            <div class="row">
+              <dt>专业</dt>
+              <dd>XX 专业（示例）</dd>
+            </div>
+            <div class="row">
+              <dt>年级</dt>
+              <dd>大三在读（示例）</dd>
+            </div>
+            <div class="row">
+              <dt>求职方向</dt>
+              <dd>XX 岗位（示例）</dd>
+            </div>
+            <div class="row">
+              <dt>状态</dt>
+              <dd>可实习 / 可全职（示例）</dd>
+            </div>
+          </dl>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 技能板块 ============ -->
+  <section class="section" id="skills">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Skills</p>
+        <h2>基础技能</h2>
+        <p class="lead">都是课程和作业里练出来的东西，能上手做，不夸大。</p>
+      </div>
+
+      <ul class="skill-grid">
+        <li class="skill-card">
+          <h3>CAD 基础</h3>
+          <p>能独立完成平面图绘制与尺寸标注，看得懂简单施工图。</p>
+        </li>
+        <li class="skill-card">
+          <h3>Excel 基础</h3>
+          <p>会做数据清洗、常用函数和基础图表，能整理课程数据。</p>
+        </li>
+        <li class="skill-card">
+          <h3>文档整理</h3>
+          <p>把零散资料归档成清单，报告排版和引用能对得上。</p>
+        </li>
+        <li class="skill-card">
+          <h3>网页制作</h3>
+          <p>用原生 HTML / CSS 写静态页面，手机和电脑都能正常显示。</p>
+        </li>
+        <li class="skill-card">
+          <h3>课程作业展示</h3>
+          <p>把作业整理成可汇报的图文材料，能讲清楚思路和结论。</p>
+        </li>
+        <li class="skill-card">
+          <h3>团队协作</h3>
+          <p>小组作业里负责分工和进度跟进，能把任务拆到人、按时收齐。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 项目经历板块 ============ -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Projects</p>
+        <h2>项目经历</h2>
+        <p class="lead">以下为课程与自主练习项目示例，名称、工具和成果都可以替换成你自己的内容。</p>
+      </div>
+
+      <div class="project-grid">
+
+        <article class="project-card">
+          <h3>项目名称占位：小型平面图绘制</h3>
+          <div class="project-meta">
+            <span class="project-type">课程设计</span>
+            <span>使用工具：AutoCAD、Excel</span>
+          </div>
+          <p class="project-desc">
+            按课程要求完成一套小型平面图，整理尺寸标注、图层规范与材料清单，最终提交图纸和说明文档。
+          </p>
+          <div class="project-result">
+            <span class="label">成果说明（可替换）</span>
+            交付 3 张图纸 + 1 份材料表，课程评图一次通过。
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>项目名称占位：课程数据整理与图表汇报</h3>
+          <div class="project-meta">
+            <span class="project-type">课程作业</span>
+            <span>使用工具：Excel、Word</span>
+          </div>
+          <p class="project-desc">
+            把课程调研收集的原始数据做清洗和分类，用图表呈现主要结论，最后写成一份可汇报的报告。
+          </p>
+          <div class="project-result">
+            <span class="label">成果说明（可替换）</span>
+            整理 2000+ 行数据，产出 4 张图表和 1 份 8 页报告。
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>项目名称占位：个人主页静态页面</h3>
+          <div class="project-meta">
+            <span class="project-type">自主练习</span>
+            <span>使用工具：HTML、CSS、JavaScript</span>
+          </div>
+          <p class="project-desc">
+            单文件实现的静态个人主页，无外部依赖；导航可跳转并高亮当前板块，卡片有轻微悬停反馈。
+          </p>
+          <div class="project-result">
+            <span class="label">成果说明（可替换）</span>
+            一个 .html 文件即可运行，手机与电脑端均正常浏览。
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 联系方式板块 ============ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Contact</p>
+        <h2>联系方式</h2>
+        <p class="lead">想聊课程项目、实习机会或作业合作，都可以直接发邮件。</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-row">
+          <span class="contact-label">邮箱</span>
+          <span class="contact-value"><a href="mailto:your.name@example.com">your.name@example.com</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">社交账号</span>
+          <span class="contact-value">@your_handle（示例占位）</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">备注</span>
+          <span class="contact-value">工作日 24 小时内回复（示例）</span>
+        </div>
+      </div>
+
+      <p class="contact-note">示例模板，可替换为真实信息。</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <p>
+      <span class="footer-brand">你的姓名 · 个人主页示例</span>
+      本页面为静态展示模板，不存储用户提交信息。
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   第 1 段：导航高亮（滚动时判断当前板块）
+   ============================================================ */
+(function () {
+  const navLinks = Array.prototype.slice.call(
+    document.querySelectorAll('#navLinks a')
+  );
+  const sections = navLinks
+    .map(function (link) {
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      return el ? { id: id, el: el, link: link } : null;
+    })
+    .filter(Boolean);
+
+  const header = document.getElementById('siteHeader');
+  let ticking = false;
+
+  // 顶部导航高度：桌面端粘性导航需要让出空间，手机端为静态导航
+  function navOffset() {
+    const style = window.getComputedStyle(header);
+    return style.position === 'sticky' ? header.offsetHeight : 0;
+  }
+
+  function setActive(id) {
+    sections.forEach(function (item) {
+      const isActive = item.id === id;
+      item.link.classList.toggle('is-active', isActive);
+      if (isActive) {
+        item.link.setAttribute('aria-current', 'true');
+      } else {
+        item.link.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  function updateActive() {
+    const line = window.scrollY + navOffset() + 40;
+    let currentId = sections[0].id;
+
+    // 取“已经越过判定线”的最后一个板块
+    sections.forEach(function (item) {
+      if (item.el.offsetTop <= line) currentId = item.id;
+    });
+
+    // 滚动到页面底部时，强制高亮最后一个板块
+    const atBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 4;
+    if (atBottom) currentId = sections[sections.length - 1].id;
+
+    setActive(currentId);
+
+    // 滚动后给导航加一层轻阴影，避免和内容糊在一起
+    if (header.style.position !== 'static' && navOffset() > 0) {
+      header.classList.toggle('is-scrolled', window.scrollY > 8);
+    }
+  }
+
+  function onScroll() {
+    // 用极短的定时器合并高频滚动事件，保证最后一次滚动一定会被处理
+    if (ticking) return;
+    ticking = true;
+    window.setTimeout(function () {
+      updateActive();
+      ticking = false;
+    }, 16);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+
+  /* ============================================================
+     第 2 段：点击导航立即高亮
+     （平滑滚动由 CSS 的 scroll-behavior 完成；
+       这里只负责先把状态切过去，避免滚动过程中高亮跳动）
+     ============================================================ */
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+      const id = link.getAttribute('href').slice(1);
+      setActive(id);
+    });
+  });
+
+  // 初始状态
+  updateActive();
+})();
+</script>
+</body>
+</html>
